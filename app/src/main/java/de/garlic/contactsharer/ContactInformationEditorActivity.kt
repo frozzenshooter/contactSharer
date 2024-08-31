@@ -1,18 +1,18 @@
 package de.garlic.contactsharer
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
 
 class ContactInformationEditorActivity : AppCompatActivity() {
-
-    private var isDatePickerShown = false
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,42 +21,31 @@ class ContactInformationEditorActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_contact_information_editor)
 
-//        val birthdayEditText = findViewById<TextInputEditText>(R.id.editBirthday)
-//
-//
-//        // Create a MaterialDatePicker instance
-//        val datePicker =
-//            MaterialDatePicker.Builder.datePicker().setTitleText("Select your birthday")
-//                .setCalendarConstraints(
-//                    CalendarConstraints.Builder()
-//                        .setValidator(DateValidatorPointBackward.now()) // Only allow past dates
-//                        .build()
-//                ).build()
-//
-//        birthdayEditText.setOnClickListener {
-//            // Prevent multiple clicks from showing multiple dialogs
-//            if (!isDatePickerShown) {
-//                isDatePickerShown = true
-//
-//                // Show the DatePicker
-//                datePicker.show(supportFragmentManager, "MATERIAL_DATE_PICKER")
-//            }
-//        }
-//
-//        // Reset the flag when the picker is dismissed
-//        datePicker.addOnDismissListener {
-//            isDatePickerShown = false
-//        }
-//
-//        // Set the date once selected
-//        datePicker.addOnPositiveButtonClickListener { selection ->
-//            // Format the date and set it to the EditText
-//            val formattedDate =
-//                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(selection))
-//            birthdayEditText.setText(formattedDate)
-//        }
-
         updateStatusBarColor()
+
+        val cancelButton = findViewById<ImageButton>(R.id.toolbar_close_button)
+        cancelButton.setOnClickListener {
+            finish()
+        }
+
+        val saveButton = findViewById<Button>(R.id.toolbar_save_button)
+        saveButton.setOnClickListener {
+            saveContactInformation()
+        }
+    }
+
+    private fun saveContactInformation() {
+        val preferences =
+            getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+
+        val gson = Gson()
+        val contact = Contact(null, null, null, null, null)
+        val contactInformationJson = gson.toJson(contact)
+        editor.putString(
+            getString(R.string.preference_contact_information_key), contactInformationJson
+        )
+        editor.apply()
     }
 
     private fun updateStatusBarColor() {

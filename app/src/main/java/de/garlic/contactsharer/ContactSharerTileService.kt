@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.widget.ImageView
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
@@ -32,29 +33,41 @@ class ContactSharerTileService : TileService() {
 
     private fun showQRCodeDialog() {
         val vCardString = generateVCardString()
-        val qrCodeBitmap = generateQRCode(vCardString)
 
-        val imageView = ImageView(this)
-        imageView.setImageBitmap(qrCodeBitmap)
+        if (vCardString != null) {
+            val qrCodeBitmap = generateQRCode(vCardString)
 
-        val dialog = AlertDialog.Builder(this).setTitle("Share Contact").setView(imageView)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }.create()
+            val imageView = ImageView(this)
+            imageView.setImageBitmap(qrCodeBitmap)
 
-        showDialog(dialog)
+            val dialog = AlertDialog.Builder(this).setTitle("Share Contact").setView(imageView)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }.create()
+
+            showDialog(dialog)
+        } else {
+            val dialog = AlertDialog.Builder(this).setTitle("Share Contact")
+                .setMessage("No data was defined for the contact yet.")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }.create()
+
+            showDialog(dialog)
+        }
     }
 
-    private fun generateVCardString(): String {
+    private fun generateVCardString(): String? {
         val preferences =
             getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val map = HashMap<VCardField, String>()
 
-        for(field in VCardField.entries){
-            map[field] = preferences.getString(field.fieldName, field.fieldName)?: field.fieldName
-        }
+        return preferences.getString(getString(R.string.preference_contact_information_key), null)
+            ?.let {
+                val gson = Gson()
+                val contact = gson.fromJson(it, Contact::class.java)
 
-        return VCardBuilder.createVCard(map)
+                VCardBuilder.createVCard(contact)
+            }
     }
 
     private fun generateQRCode(data: String): Bitmap {

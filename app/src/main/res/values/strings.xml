@@ -3,6 +3,7 @@
     <string name="default_quick_setting_name">Show your contact information</string>
     <string name="default_quick_setting_name_short">Show contact</string>
     <string name="preference_file_key">de.garlic.contactsharer.preferences</string>
+    <string name="preference_contact_information_key">contact_information_key</string>
     <string name="edit_first_name_hint">First name</string>
     <string name="edit_last_name_hint">Last name</string>
     <string name="edit_email_hint">Email</string>

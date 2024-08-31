@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.core)
     implementation(libs.zxing.android.embedded)
     implementation(libs.google.material)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
