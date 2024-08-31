@@ -3,4 +3,18 @@
     <string name="default_quick_setting_name">Show your contact information</string>
     <string name="default_quick_setting_name_short">Show contact</string>
     <string name="preference_file_key">de.garlic.contactsharer.preferences</string>
+    <string name="edit_first_name_hint">First name</string>
+    <string name="edit_last_name_hint">Last name</string>
+    <string name="edit_email_hint">Email</string>
+    <string name="edit_phone_hint">Phone number</string>
+    <string name="edit_address_hint">Address</string>
+    <string name="edit_birthday_hint">Birthday</string>
+    <string name="save_button_text">Save</string>
+    <string name="person_icon_title">Person icon</string>
+    <string name="phone_icon_title">Phone icon</string>
+    <string name="mail_icon_title">Mail icon</string>
+    <string name="address_icon_title">Address icon</string>
+    <string name="birthday_icon_title">Birthday icon</string>
+    <string name="close_contact_information_activity">Close contact information activity</string>
+    <string name="toolbar_title">Contact Information</string>
 </resources>

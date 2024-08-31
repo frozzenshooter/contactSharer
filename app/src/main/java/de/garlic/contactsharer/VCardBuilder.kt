@@ -11,7 +11,6 @@ class VCardBuilder {
         private const val TITLE_TAG = "TITLE:"
         private const val EMAIL_TAG = "EMAIL:"
         private const val BIRTHDAY_TAG = "BDAY:"
-        private const val WORK_ADDRESS_TAG = "ADR;TYPE=WORK:;;"
         private const val HOME_ADDRESS_TAG = "ADR;TYPE=HOME:;;"
         private const val WORK_CELL_PHONE_TAG = "TEL;TYPE=WORK,VOICE:"
         private const val TELEPHONE_TAG = "TEL;TYPE=HOME,VOICE:"
@@ -35,8 +34,7 @@ class VCardBuilder {
 
         private fun createValue(field: VCardField, fieldValues: Map<VCardField, String>): String? {
             return when (field) {
-                VCardField.WORK_ADDRESS_CITY -> createWorkAddress(fieldValues) // we only check for street because we always want all fields present or none
-                VCardField.HOME_ADDRESS_CITY -> createHomeAddress(fieldValues) // we only check for street because we always want all fields present or none
+                VCardField.ADDRESS_CITY -> createHomeAddress(fieldValues) // we only check for street because we always want all fields present or none
                 VCardField.CELL_PHONE -> createCellPhone(fieldValues[field])
                 VCardField.WORK_CELL_PHONE -> createWorkCellPhone(fieldValues[field])
                 VCardField.TELEPHONE -> createTelephone(fieldValues[field])
@@ -45,7 +43,7 @@ class VCardBuilder {
                 VCardField.ORGANIZATION -> createOrganization(fieldValues[field])
                 VCardField.JOB_TITLE -> createJobTitle(fieldValues[field])
                 VCardField.BIRTHDAY -> createBirthday(fieldValues[field])
-                VCardField.FIRST_NAME, VCardField.WORK_ADDRESS_STREET, VCardField.WORK_ADDRESS_COUNTRY, VCardField.WORK_ADDRESS_POSTAL_CODE, VCardField.HOME_ADDRESS_STREET, VCardField.HOME_ADDRESS_COUNTRY, VCardField.HOME_ADDRESS_POSTAL_CODE -> null
+                VCardField.FIRST_NAME, VCardField.ADDRESS_STREET, VCardField.ADDRESS_COUNTRY, VCardField.ADDRESS_POSTAL_CODE -> null
             }
         }
 
@@ -89,28 +87,13 @@ class VCardBuilder {
             val builder = StringBuilder()
 
             builder.append(HOME_ADDRESS_TAG)
-            builder.append(fieldValues[VCardField.HOME_ADDRESS_STREET])
+            builder.append(fieldValues[VCardField.ADDRESS_STREET])
             builder.append(";")
-            builder.append(fieldValues[VCardField.HOME_ADDRESS_CITY])
+            builder.append(fieldValues[VCardField.ADDRESS_CITY])
             builder.append(";;")
-            builder.append(fieldValues[VCardField.HOME_ADDRESS_POSTAL_CODE])
+            builder.append(fieldValues[VCardField.ADDRESS_POSTAL_CODE])
             builder.append(";")
-            builder.append(fieldValues[VCardField.HOME_ADDRESS_COUNTRY])
-
-            return builder.toString()
-        }
-
-        private fun createWorkAddress(fieldValues: Map<VCardField, String>): String {
-            val builder = StringBuilder()
-
-            builder.append(WORK_ADDRESS_TAG)
-            builder.append(fieldValues[VCardField.WORK_ADDRESS_STREET])
-            builder.append(";")
-            builder.append(fieldValues[VCardField.WORK_ADDRESS_CITY])
-            builder.append(";;")
-            builder.append(fieldValues[VCardField.WORK_ADDRESS_POSTAL_CODE])
-            builder.append(";")
-            builder.append(fieldValues[VCardField.WORK_ADDRESS_COUNTRY])
+            builder.append(fieldValues[VCardField.ADDRESS_COUNTRY])
 
             return builder.toString()
         }
