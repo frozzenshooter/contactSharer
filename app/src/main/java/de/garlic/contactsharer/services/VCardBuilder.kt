@@ -1,4 +1,7 @@
-package de.garlic.contactsharer
+package de.garlic.contactsharer.services
+
+import de.garlic.contactsharer.dtos.Address
+import de.garlic.contactsharer.dtos.ContactInformation
 
 class VCardBuilder {
 
@@ -7,31 +10,27 @@ class VCardBuilder {
         private const val VCARD_TAG_END = "END:VCARD"
         private const val VERSION_TAG = "VERSION:4.0"
         private const val NAME_TAG = "N:"
-        private const val ORGANIZATION_TAG = "ORG:"
-        private const val TITLE_TAG = "TITLE:"
-        private const val EMAIL_TAG = "EMAIL:"
+        private const val EMAIL_TAG = "EMAIL;TYPE=HOME:"
         private const val BIRTHDAY_TAG = "BDAY:"
         private const val HOME_ADDRESS_TAG = "ADR;TYPE=HOME:;;"
-        private const val WORK_CELL_PHONE_TAG = "TEL;TYPE=WORK,VOICE:"
-        private const val TELEPHONE_TAG = "TEL;TYPE=HOME,VOICE:"
         private const val CELL_PHONE_TAG = "TEL;TYPE=HOME,CELL:"
 
-        fun createVCard(contact: Contact): String {
+        fun createVCard(contactInformation: ContactInformation): String {
 
             val vCardBuilder = StringBuilder()
 
             vCardBuilder.append(VCARD_TAG_BEGIN + System.lineSeparator())
             vCardBuilder.append(VERSION_TAG + System.lineSeparator())
 
-            contact.name?.let { name ->
-                val firstName = name.firstName ?: ""
-                val lastName = name.lastName ?: ""
-                vCardBuilder.append("$NAME_TAG$lastName;$firstName;;;")
+            contactInformation.name.let { name ->
+                val firstName = name.firstName
+                val lastName = name.lastName
+                vCardBuilder.append("$NAME_TAG$lastName;$firstName;;;" + System.lineSeparator())
             }
-            contact.email?.let { vCardBuilder.append(EMAIL_TAG + it) }
-            contact.phone?.let { vCardBuilder.append(TELEPHONE_TAG + it) }
-            contact.cellPhone?.let { vCardBuilder.append(CELL_PHONE_TAG + it) }
-            contact.address?.let { vCardBuilder.append(createHomeAddress(it)) }
+            contactInformation.birthday.let { vCardBuilder.append(BIRTHDAY_TAG + it + System.lineSeparator()) }
+            contactInformation.email.let { vCardBuilder.append(EMAIL_TAG + it + System.lineSeparator()) }
+            contactInformation.phone.let { vCardBuilder.append(CELL_PHONE_TAG + it + System.lineSeparator()) }
+            contactInformation.address.let { vCardBuilder.append(createHomeAddress(it) + System.lineSeparator()) }
 
             vCardBuilder.append(VCARD_TAG_END);
             return vCardBuilder.toString()

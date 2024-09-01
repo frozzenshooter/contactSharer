@@ -1,5 +1,6 @@
 package de.garlic.contactsharer
 
+import de.garlic.contactsharer.services.VCardBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

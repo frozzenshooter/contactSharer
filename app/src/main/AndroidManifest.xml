@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".ContactSharerTileService"
+            android:name=".services.ContactInformationTileService"
             android:exported="true"
             android:label="@string/default_quick_setting_name"
             android:icon="@drawable/qr_code_2_24px"

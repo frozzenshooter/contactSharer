@@ -1,4 +1,4 @@
-package de.garlic.contactsharer
+package de.garlic.contactsharer.dtos
 
 data class Address(
     val street: String,
